@@ -9,7 +9,7 @@ opening against your résumé the day it's posted — so well-matched roles find
 you, not the other way around.
 
 This repo is the developer face of the product: what it looks like, how it's
-built at a high level, and the parts of the engine we open-source.
+built at a high level, and an index of the parts of the engine we open-source.
 
 ## What it does
 
@@ -46,31 +46,30 @@ résumé version is out-performing, and where applications are going stale:
 
 ![SearchSteward landing page](assets/landing.png)
 
-## Open-source modules
+## Open source at SearchSteward
 
-We open-source the pieces where transparency *is* the feature. Both are
-MIT-licensed, dependency-free, and are the same code running in production.
+We open-source the pieces where **transparency is the feature** — the code
+that reads, checks, and classifies job postings on your behalf. If a tool
+filters jobs by salary or flags a listing as a ghost job, you deserve to see
+exactly how it decides. Everything below is MIT-licensed, dependency-free,
+and the same code running in production.
 
-### [`resume-match/`](resume-match/) — Résumé ↔ JD matcher + ghost-posting checker (TypeScript)
+| Repository | What it is | Language |
+|---|---|---|
+| **[resume-match](https://github.com/searchsteward/resume-match)** | The engines behind our free, no-signup tools: `scoreMatch()` (résumé ↔ JD keyword-coverage scoring) and `checkGhostJob()` (scam/ghost-posting checklist). Runs entirely in your browser — pasted text never leaves the page, and publishing the source is how we back that claim. | TypeScript |
+| **[ghost-signal](https://github.com/searchsteward/ghost-signal)** | The production decision logic behind the in-app ghost-job badge. Deliberately conservative: absence of evidence yields `unknown`, never `clean`, and every tier carries its reasons. Every signal and weight is documented. | Python |
+| **[salary-parser](https://github.com/searchsteward/salary-parser)** | Extracts real salaries from posting text without fabricating them. A naive regex reads *"10-15 hours per week"* as $20,800 a year; this is the context-gated, cadence-aware extractor that doesn't. 86 tests, most of them real-posting regressions. | Python |
+| **[location-parser](https://github.com/searchsteward/location-parser)** | Parses the location strings job boards *actually* emit — Workday req-id suffixes, Greenhouse dict leaks, trailing ZIPs, `"Mexico, Remote"` vs bare `"Remote"` — into structured city/state/country + remote components. | Python |
 
-The engines behind our free, no-signup tools. Both run entirely in your
-browser — pasted text never leaves the page, and publishing the source is how
-we back that claim up.
+Each library lives in its own repository with its own tests, README, and
+issue tracker. They're small on purpose: one job each, zero dependencies,
+easy to vendor.
 
-- `scoreMatch()` — keyword-coverage scoring with stemming, acronym handling,
-  phrase boosting, and JD-filler suppression. Powers
-  [searchsteward.com/tools/resume-match](https://searchsteward.com/tools/resume-match).
-- `checkGhostJob()` — a weighted checklist of documented scam/ghost-posting
-  signals with human-readable explanations. Powers
-  [searchsteward.com/tools/ghost-job-checker](https://searchsteward.com/tools/ghost-job-checker).
-
-### [`ghost-signal/`](ghost-signal/) — Production ghost-job signal (Python)
-
-The actual decision logic behind the in-app ghost-job badge: pure, I/O-free,
-and deliberately conservative. Absence of evidence yields `unknown`, never
-`clean`; every tier carries its reasons; and market-universal noise (like a
-missing salary) is recorded but never counted against a listing. The README
-documents every signal and weight.
+**What stays closed:** the scoring weights and gate tuning, the per-ATS
+scraping internals, and the company registry — the parts that keep the
+hosted service fresh and are how we keep the lights on. Open code where
+seeing the logic protects you; a paid service where running the machinery
+serves you.
 
 ## How it's built
 
@@ -88,10 +87,6 @@ A single product, three layers:
   fit narratives, résumé tailoring, and negotiation prep.
 - **Product (TypeScript).** A Next.js/React app backed by a FastAPI service
   and PostgreSQL.
-
-The scoring weights, gate tuning, ATS adapter details, and company registry
-are the proprietary core and stay closed — what we open-source instead are the
-user-facing checks where seeing the logic is the point.
 
 ## Free tools (no signup)
 
