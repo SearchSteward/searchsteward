@@ -46,6 +46,10 @@ résumé version is out-performing, and where applications are going stale:
 
 ![SearchSteward landing page](assets/landing.png)
 
+**Want the full walkthrough?** The step-by-step
+[**Getting Started guide**](https://searchsteward.com/guides/getting-started)
+covers signup to first scored matches, with screenshots of every step.
+
 ## Open source at SearchSteward
 
 We open-source the pieces where **transparency is the feature** — the code
